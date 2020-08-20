@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.widlof.minimaldex.R
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
 import kotlinx.android.synthetic.main.fragment_main.*
+import java.util.*
 
 /**
  * A placeholder fragment containing a simple view.
@@ -24,7 +25,7 @@ class NationalDexFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         nationalDexViewModel =
-            ViewModelProvider(this).get(NationalDexViewModel::class.java)
+            ViewModelProvider(this, NationalDexViewModelFactory()).get(NationalDexViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -42,6 +43,9 @@ class NationalDexFragment : Fragment() {
                 notifyDataSetChanged()
             }
         })
+        nationalDexViewModel.pokemon.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(activity, it.pokemonName.toUpperCase(), Toast.LENGTH_SHORT).show()
+        })
         setUpRecycler()
         nationalDexViewModel.getPokemonList()
     }
@@ -51,9 +55,9 @@ class NationalDexFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             nationalDexAdapter = NationalDexAdapter(requireContext(), mutableListOf(), object: NationalDexListener {
                 override fun onPokemonClicked(pokemon: PokemonListSingle) {
-                    Toast.makeText(activity, pokemon.name, Toast.LENGTH_LONG).show()
+                    nationalDexViewModel.getSinglePokemon(pokemon.name.toLowerCase(Locale.ENGLISH))
+                    Toast.makeText(activity, pokemon.name, Toast.LENGTH_SHORT).show()
                 }
-
             })
             adapter = nationalDexAdapter
         }
