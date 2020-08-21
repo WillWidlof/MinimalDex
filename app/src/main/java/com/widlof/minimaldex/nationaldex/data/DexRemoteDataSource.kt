@@ -23,7 +23,11 @@ class DexRemoteDataSource(private val networkRequestSender: NetworkRequestSender
                     val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                     val adapter: JsonAdapter<NationalDexResponse>
                             = moshi.adapter(NationalDexResponse::class.java)
-                    NetworkResponse.Success(adapter.fromJson(response.responseBody))
+                    val response = adapter.fromJson(response.responseBody)
+                    response?.results?.forEachIndexed { index, pokemonSingle ->
+                        pokemonSingle.dexNo = (index + 1).toString()
+                    }
+                    NetworkResponse.Success(response)
                 }
             } else {
                 NetworkResponse.Error(PARSE_ERROR)

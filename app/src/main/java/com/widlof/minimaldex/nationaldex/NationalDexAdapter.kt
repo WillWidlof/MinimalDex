@@ -32,7 +32,7 @@ class NationalDexAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pokemon = pokemonList[position]
         holder.pokemonName.text = pokemon.name.substring(0, 1).toUpperCase(Locale.ROOT) + pokemon.name.substring(1);
-        val pokemonNumber = String.format("%04d", (position + 1))
+        val pokemonNumber = String.format("%04d", (pokemon.dexNo?.toInt()))
         holder.pokemonNumber.text = "#$pokemonNumber"
         holder.layout.setOnClickListener {
             nationalDexListener.onPokemonClicked(pokemon)
