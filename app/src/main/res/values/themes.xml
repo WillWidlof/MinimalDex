@@ -9,6 +9,7 @@
         <item name="colorSecondary">@color/background_surface</item>
         <item name="colorSecondaryVariant">@color/black</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="android:elevation">0dp</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar_dark</item>
         <!-- Customize your theme here. -->

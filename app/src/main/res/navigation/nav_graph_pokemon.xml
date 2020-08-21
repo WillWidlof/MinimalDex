@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_pokemon"
+    app:startDestination="@id/nationalDexFragment">
+
+    <fragment
+        android:id="@+id/nationalDexFragment"
+        android:name="com.widlof.minimaldex.nationaldex.NationalDexFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_nationalDexFragment_to_pokemonDetailsFragment"
+            app:destination="@id/pokemonDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@id/nationalDexFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.widlof.minimaldex.pokemondetails.PokemonDetailsFragment"
+        android:label="fragment_pokemon_details"
+        tools:layout="@layout/fragment_pokemon_details" >
+        <argument
+            android:name="pokemonName"
+            app:argType="string" />
+    </fragment>
+</navigation>

@@ -8,9 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.widlof.minimaldex.R
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
+import com.widlof.minimaldex.pokemondetails.PokemonDetailsFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.util.*
 
@@ -44,7 +48,8 @@ class NationalDexFragment : Fragment() {
             }
         })
         nationalDexViewModel.pokemon.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(activity, it.pokemonName.toUpperCase(), Toast.LENGTH_SHORT).show()
+            findNavController().navigate(NationalDexFragmentDirections
+                .actionNationalDexFragmentToPokemonDetailsFragment(it.pokemonName))
         })
         setUpRecycler()
         nationalDexViewModel.getPokemonList()

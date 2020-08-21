@@ -8,8 +8,10 @@
     android:background="@color/status_bar_dark">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:background="@drawable/toolbar_background"
         android:theme="@style/Theme.MinimalDex.AppBarOverlay">
 
@@ -29,7 +31,7 @@
             android:layout_height="wrap_content"
             android:background="@color/accent_red"
             app:tabBackground="@drawable/tab_background_color_selector"
-            app:tabTextColor="@color/textColour"/>
+            app:tabTextColor="@color/tab_text_color"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager

@@ -3,9 +3,13 @@ package com.widlof.minimaldex.nationaldex.data
 import android.graphics.Bitmap
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import com.widlof.minimaldex.network.NetworkResponse
+import com.widlof.minimaldex.pokemondetails.data.PokemonCache
 
 class GetSinglePokemonInteractor(private val repository: DexDataSource) {
     suspend fun getSinglePokemon(name: String): PokemonSingle? {
+       PokemonCache.pokemonCache[name]?.let {
+           return it
+       }
         val response = repository.getSinglePokemonMainJson(name)
         if (response is NetworkResponse.Success) {
             response.responseBody?.let {
@@ -13,7 +17,7 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
                 val backSprite = getSprite(it.sprites.back_default)
 
                 with(response.responseBody) {
-                    return com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle(
+                    val pokemon =  PokemonSingle(
                         name,
                         frontSprite,
                         backSprite,
@@ -23,6 +27,8 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
                         null,
                         null
                     )
+                    PokemonCache.pokemonCache[name] = pokemon
+                    return PokemonCache.pokemonCache[name]
                 }
             }
             return null
