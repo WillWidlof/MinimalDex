@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import com.widlof.minimaldex.network.NetworkResponse
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
+import com.widlof.minimaldex.pokemondetails.data.model.PokemonType
+import com.widlof.minimaldex.pokemondetails.data.model.PokemonTypeResponse
 
 class GetSinglePokemonInteractor(private val repository: DexDataSource) {
     suspend fun getSinglePokemon(name: String): PokemonSingle? {
@@ -15,6 +17,7 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
             response.responseBody?.let {
                 val frontSprite = getSprite(it.sprites.front_default)
                 val backSprite = getSprite(it.sprites.back_default)
+                val types = getTypes(it.types)
 
                 with(response.responseBody) {
                     val pokemon =  PokemonSingle(
@@ -24,7 +27,7 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
                         sprites,
                         null,
                         null,
-                        null,
+                        types,
                         null
                     )
                     PokemonCache.pokemonCache[name] = pokemon
@@ -35,6 +38,16 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
         }
         return null
 
+    }
+
+    private fun getTypes(types: List<PokemonTypeResponse>): List<PokemonType>? {
+        val typeList = mutableListOf<PokemonType>()
+        for (type in types) {
+            with(type.type) {
+                typeList.add(PokemonType(name = name, url = url))
+            }
+        }
+        return typeList
     }
 
     private suspend fun getSprite(url: String?): Bitmap? {
