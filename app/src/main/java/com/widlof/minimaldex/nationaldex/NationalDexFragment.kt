@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.widlof.minimaldex.R
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
+import com.widlof.minimaldex.util.ViewUtils
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.util.*
 
@@ -22,6 +23,7 @@ class NationalDexFragment : Fragment() {
     private lateinit var nationalDexViewModel: NationalDexViewModel
     private lateinit var nationalDexAdapter: NationalDexAdapter
     private var baseList: List<PokemonListSingle> = listOf()
+    private var isMenuOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,39 @@ class NationalDexFragment : Fragment() {
         })
         setUpRecycler()
         setUpFilter()
+        setUpFloatingMenu()
+
         nationalDexViewModel.getPokemonList()
+    }
+
+    private fun setUpFloatingMenu() {
+        fab.setOnClickListener {
+            if (isMenuOpen) {
+                ViewUtils.rotateFabBackward(it)
+                hideFloatingMenu()
+            } else {
+                ViewUtils.rotateFabForward(it)
+                showFloatingMenu()
+            }
+        }
+        fab_scroll_bottom.setOnClickListener {
+            rv_national_dex.smoothScrollToPosition(nationalDexAdapter.pokemonList.lastIndex)
+        }
+        fab_scroll_top.setOnClickListener {
+            rv_national_dex.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun showFloatingMenu() {
+        isMenuOpen = true
+        fab_scroll_bottom.animate().translationY(-resources.getDimension(R.dimen.fab_bottom_spacing))
+        fab_scroll_top.animate().translationY(-resources.getDimension(R.dimen.fab_top_spacing))
+    }
+
+    private fun hideFloatingMenu() {
+        isMenuOpen = false
+        fab_scroll_bottom.animate().translationY(0f)
+        fab_scroll_top.animate().translationY(0f)
     }
 
     private fun setUpFilter() {

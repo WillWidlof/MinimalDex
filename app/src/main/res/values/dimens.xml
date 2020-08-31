@@ -14,4 +14,11 @@
     <dimen name="sub_title_size">24sp</dimen>
     <dimen name="type_width">100dp</dimen>
 
+    <dimen name="fab_menu_size">56dp</dimen>
+    <dimen name="fab_menu_icon_size">48dp</dimen>
+    <dimen name="fab_menu_sub_menu_size">48dp</dimen>
+
+    <dimen name="fab_bottom_spacing">72dp</dimen>
+    <dimen name="fab_top_spacing">144dp</dimen>
+
 </resources>
