@@ -21,7 +21,7 @@ class NationalDexFragment : Fragment() {
 
     private lateinit var nationalDexViewModel: NationalDexViewModel
     private lateinit var nationalDexAdapter: NationalDexAdapter
-    private lateinit var baseList: List<PokemonListSingle>
+    private var baseList: List<PokemonListSingle> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
