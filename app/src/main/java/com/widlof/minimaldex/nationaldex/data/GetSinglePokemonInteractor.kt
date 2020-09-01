@@ -1,11 +1,9 @@
 package com.widlof.minimaldex.nationaldex.data
 
 import android.graphics.Bitmap
-import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import com.widlof.minimaldex.network.NetworkResponse
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
-import com.widlof.minimaldex.pokemondetails.data.model.PokemonType
-import com.widlof.minimaldex.pokemondetails.data.model.PokemonTypeResponse
+import com.widlof.minimaldex.pokemondetails.data.model.*
 
 class GetSinglePokemonInteractor(private val repository: DexDataSource) {
     suspend fun getSinglePokemon(name: String): PokemonSingle? {
@@ -18,6 +16,8 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
                 val frontSprite = getSprite(it.sprites.front_default)
                 val backSprite = getSprite(it.sprites.back_default)
                 val types = getTypes(it.types)
+                val moves = getMoves(it.moves)
+                val stats = getStats(it.stats)
 
                 with(response.responseBody) {
                     val pokemon =  PokemonSingle(
@@ -25,8 +25,8 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
                         frontSprite,
                         backSprite,
                         sprites,
-                        null,
-                        null,
+                        moves,
+                        stats,
                         types,
                         null
                     )
@@ -38,6 +38,24 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
         }
         return null
 
+    }
+
+    private fun getStats(stats: List<PokemonStatResponse>): List<PokemonStat> {
+        val statList = mutableListOf<PokemonStat>()
+        for (stat in stats) {
+            statList.add(stat.stat.apply {
+                value = stat.base_stat
+            })
+        }
+        return statList
+    }
+
+    private fun getMoves(moves: List<PokemonMoveResponse>): List<PokemonMove> {
+        val moveList = mutableListOf<PokemonMove>()
+        for (move in moves) {
+            moveList.add(move.move)
+        }
+        return moveList
     }
 
     private fun getTypes(types: List<PokemonTypeResponse>): List<PokemonType>? {

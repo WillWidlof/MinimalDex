@@ -5,11 +5,12 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import com.widlof.minimaldex.R
+import com.widlof.minimaldex.util.DrawableUtils
 
 
 class TypeBackground(private val context: Context) {
         fun provideBackground(type: String): Drawable {
-            return generateDrawable(when(type) {
+            return DrawableUtils.generateDrawable(context, when(type) {
                 BUG -> R.color.bug
                 DARK -> R.color.dark
                 DRAGON -> R.color.dragon
@@ -30,18 +31,6 @@ class TypeBackground(private val context: Context) {
                 WATER -> R.color.water
                 else -> R.color.unknown
             })
-        }
-
-        private fun generateDrawable(color: Int): Drawable {
-            val r = 8f
-            return ShapeDrawable(
-                RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r), null, null)).apply {
-                paint.color = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    context.getColor(color)
-                } else {
-                    context.resources.getColor(color)
-                }
-            }
         }
 
     companion object {

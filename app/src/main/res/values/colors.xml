@@ -29,4 +29,19 @@
     <color name="steel">#B8B8D0</color>
     <color name="water">#6890F0</color>
     <color name="unknown">#68A090</color>
+
+    <color name="hp">#4efa48</color>
+    <color name="hp_background">#1e5c1b</color>
+    <color name="attack">#faf448</color>
+    <color name="attack_backgrond">#65691f</color>
+    <color name="defense">#f29b0c</color>
+    <color name="defense_background">#694d1f</color>
+    <color name="special_attack">#2a84db</color>
+    <color name="special_attack_background">#103961</color>
+    <color name="special_defense">#9331c4</color>
+    <color name="special_defense_background">#47195e</color>
+    <color name="speed">#e038c9</color>
+    <color name="speed_background">#6b1c60</color>
+    <color name="default_stat">#A1A1A1</color>
+    <color name="default_background">#656563</color>
 </resources>

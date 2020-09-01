@@ -19,7 +19,7 @@ data class PokemonSpritesResponse(val front_default: String?,
 
 data class PokemonMoveResponse(val move: PokemonMove)
 
-data class PokemonStatResponse(val stat: PokemonStat)
+data class PokemonStatResponse(val base_stat: String, var stat: PokemonStat)
 
 data class PokemonTypeResponse(val type: PokemonType)
 

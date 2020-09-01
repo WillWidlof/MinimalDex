@@ -28,4 +28,9 @@
         <item name="android:textSize">@dimen/sub_title_size</item>
         <item name="android:textColor">@color/tab_text_color</item>
     </style>
+
+    <style name="pokemon_sub_title">
+        <item name="android:textSize">@dimen/pokemon_sub_title_size</item>
+        <item name="android:textColor">@color/tab_text_color</item>
+    </style>
 </resources>

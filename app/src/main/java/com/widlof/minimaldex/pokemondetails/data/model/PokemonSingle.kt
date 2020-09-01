@@ -13,7 +13,7 @@ data class PokemonSingle(val pokemonName: String,
 
 data class PokemonMove(val name: String, val url: String)
 
-data class PokemonStat(val name: String, val url: String)
+data class PokemonStat(val name: String, val url: String, var value: String?)
 
 data class PokemonType(val name: String, val url: String)
 
