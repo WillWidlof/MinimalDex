@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.widlof.minimaldex.R
+import com.widlof.minimaldex.nationaldex.data.model.Species
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonMove
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonStat
 import com.widlof.minimaldex.pokemondetails.type.TypeBackground
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
+import kotlinx.android.synthetic.main.pokemon_evolution.view.*
 import kotlinx.android.synthetic.main.pokemon_move.view.*
 import kotlinx.android.synthetic.main.pokemon_stat.view.*
 
@@ -60,6 +62,33 @@ class PokemonDetailsFragment : Fragment() {
         setTypes(pokemon)
         setStats(pokemon?.statList)
         setMoves(pokemon?.moveList)
+        setEvolutions(pokemon?.species)
+        setFlavourText(pokemon?.species?.flavourText)
+    }
+
+    private fun setFlavourText(flavourText: String?) {
+        if (flavourText != null) {
+            tv_pokemon_flavour_text.text = flavourText.replace("\n", " ", true)
+        } else {
+            tv_pokemon_flavour_text.visibility = View.GONE
+        }
+    }
+
+    private fun setEvolutions(species: Species?) {
+        species?.let {
+            it.evolutions?.let { list ->
+                for (evolution in list) {
+                    val view = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.pokemon_evolution, null).apply {
+                            tv_pokemon_evolution_name.text = evolution.evolutionName?.capitalize()
+                            cl_evolution.setOnClickListener {
+                                //Handle showing evolved form
+                            }
+                        }
+                    ll_pokemon_evolution.addView(view)
+                }
+            }
+        }
     }
 
     private fun setMoves(moveList: List<PokemonMove>?) {

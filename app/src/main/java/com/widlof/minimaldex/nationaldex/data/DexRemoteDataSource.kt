@@ -5,7 +5,9 @@ import android.util.Log
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.widlof.minimaldex.nationaldex.data.model.EvolutionChainResponse
 import com.widlof.minimaldex.nationaldex.data.model.NationalDexResponse
+import com.widlof.minimaldex.nationaldex.data.model.SpeciesResponse
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonResponse
 import com.widlof.minimaldex.network.NetworkRequestSender
 import com.widlof.minimaldex.network.NetworkResponse
@@ -66,6 +68,47 @@ class DexRemoteDataSource(private val networkRequestSender: NetworkRequestSender
             if (response.responseBody != null) {
                 response.responseBody.let {
                     NetworkResponse.Success(it)
+                }
+            } else {
+                NetworkResponse.Error(PARSE_ERROR)
+            }
+        } else {
+            response as NetworkResponse.Error
+        }
+    }
+
+    override suspend fun getSpeciesBase(url: String): NetworkResponse<SpeciesResponse?> = withContext(Dispatchers.IO) {
+        val response = networkRequestSender.makeJsonRequest(url)
+        return@withContext if (response is NetworkResponse.Success) {
+            if (response.responseBody != null) {
+                response.responseBody.let {
+                    Log.d("JSON RESPONSE:", response.responseBody)
+                    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                    val adapter: JsonAdapter<SpeciesResponse>
+                            = moshi.adapter(SpeciesResponse::class.java)
+                    val result = adapter.fromJson(response.responseBody)
+                    NetworkResponse.Success(result)
+                }
+            } else {
+                NetworkResponse.Error(PARSE_ERROR)
+            }
+        } else {
+            response as NetworkResponse.Error
+        }
+    }
+
+    override suspend fun getEvolutionChain(url: String):
+            NetworkResponse<EvolutionChainResponse?> = withContext(Dispatchers.IO) {
+        val response = networkRequestSender.makeJsonRequest(url)
+        return@withContext if (response is NetworkResponse.Success) {
+            if (response.responseBody != null) {
+                response.responseBody.let {
+                    Log.d("JSON RESPONSE:", response.responseBody)
+                    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                    val adapter: JsonAdapter<EvolutionChainResponse>
+                            = moshi.adapter(EvolutionChainResponse::class.java)
+                    val result = adapter.fromJson(response.responseBody)
+                    NetworkResponse.Success(result)
                 }
             } else {
                 NetworkResponse.Error(PARSE_ERROR)

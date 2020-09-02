@@ -5,8 +5,7 @@ data class PokemonResponse(val name: String,
                            val moves: List<PokemonMoveResponse>,
                            val stats: List<PokemonStatResponse>,
                            val types: List<PokemonTypeResponse>,
-                           val species: PokemonSpeciesResponse
-)
+                           val species: PokemonSpeciesResponse)
 
 data class PokemonSpritesResponse(val front_default: String?,
                                   val back_default: String?,

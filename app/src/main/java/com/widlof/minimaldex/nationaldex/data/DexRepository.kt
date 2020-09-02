@@ -1,7 +1,9 @@
 package com.widlof.minimaldex.nationaldex.data
 
 import android.graphics.Bitmap
+import com.widlof.minimaldex.nationaldex.data.model.EvolutionChainResponse
 import com.widlof.minimaldex.nationaldex.data.model.NationalDexResponse
+import com.widlof.minimaldex.nationaldex.data.model.SpeciesResponse
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonResponse
 import com.widlof.minimaldex.network.NetworkResponse
 
@@ -25,5 +27,13 @@ class DexRepository(private val dataSource: DexDataSource): DexDataSource {
 
     override suspend fun getSprite(spriteUrl: String): NetworkResponse<Bitmap?> {
         return dataSource.getSprite(spriteUrl)
+    }
+
+    override suspend fun getSpeciesBase(url: String): NetworkResponse<SpeciesResponse?> {
+        return dataSource.getSpeciesBase(url)
+    }
+
+    override suspend fun getEvolutionChain(url: String): NetworkResponse<EvolutionChainResponse?> {
+        return dataSource.getEvolutionChain(url)
     }
 }
