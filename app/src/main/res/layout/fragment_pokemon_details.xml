@@ -9,8 +9,38 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:animateLayoutChanges="true">
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/cl_grp_pokemon_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="tv_pokemon_name,
+            tv_pokemon_type_one,
+            tv_pokemon_type_two,
+            iv_front_sprite,
+            iv_back_sprite,
+            tv_pokemon_flavour_text,
+            ll_stats,
+            tv_evolution_title,
+            ll_pokemon_evolution,
+            tv_extras_title,
+            ll_pokemon_extras,
+            tv_pokedex_numbers_title,
+            ll_pokedex_numbers, tv_pokemon_move_title, tv_move_info"/>
+
+        <ProgressBar
+            android:id="@+id/pgr_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="?android:attr/progressBarStyleHorizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tv_pokemon_name"

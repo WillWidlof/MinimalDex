@@ -49,6 +49,8 @@ class NationalDexFragment : Fragment() {
                 pokemonList = it
                 notifyDataSetChanged()
             }
+            cl_grp_pokemon_details.visibility = View.VISIBLE
+            pgr_loading.visibility = View.GONE
         })
         nationalDexViewModel.pokemon.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(
@@ -133,8 +135,9 @@ class NationalDexFragment : Fragment() {
             nationalDexAdapter =
                 NationalDexAdapter(requireContext(), mutableListOf(), object : NationalDexListener {
                     override fun onPokemonClicked(pokemon: PokemonListSingle) {
+                        cl_grp_pokemon_details.visibility = View.GONE
+                        pgr_loading.visibility = View.VISIBLE
                         nationalDexViewModel.getSinglePokemon(pokemon.name.toLowerCase(Locale.ENGLISH))
-                        Toast.makeText(activity, pokemon.name, Toast.LENGTH_SHORT).show()
                     }
                 })
             adapter = nationalDexAdapter

@@ -8,9 +8,12 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.widlof.minimaldex.R
+import com.widlof.minimaldex.nationaldex.NationalDexViewModel
+import com.widlof.minimaldex.nationaldex.NationalDexViewModelFactory
 import com.widlof.minimaldex.nationaldex.data.model.PokedexNumbersResponse
 import com.widlof.minimaldex.nationaldex.data.model.Species
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
@@ -33,6 +36,7 @@ class PokemonDetailsFragment : Fragment() {
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var typeBackground: TypeBackground
     private var isMovesExpanded = false
+    private var pokemonClicked = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +53,7 @@ class PokemonDetailsFragment : Fragment() {
                 override fun handleOnBackPressed() {
                     findNavController().apply {
                         navigateUp()
-                        popBackStack()
+                        popBackStack(R.id.action_nationalDexFragment_to_pokemonDetailsFragment, true)
                     }
                 }
             }
@@ -70,6 +74,12 @@ class PokemonDetailsFragment : Fragment() {
         setFlavourText(pokemon?.species?.flavourText)
         setExtraDetails(pokemon?.species?.extraDetails)
         setPokedexNumbers(pokemon?.species?.dexNumbers)
+        setLoadComplete()
+    }
+
+    private fun setLoadComplete() {
+        cl_grp_pokemon_details.visibility = View.VISIBLE
+        pgr_loading.visibility = View.GONE
     }
 
     private fun setPokedexNumbers(dexNumbers: List<PokedexNumbersResponse>?) {
