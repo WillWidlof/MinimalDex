@@ -75,29 +75,30 @@
             android:id="@+id/tv_pokemon_flavour_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_small"
             android:textAlignment="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_front_sprite"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/spacing_small"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_front_sprite" />
 
         <LinearLayout
             android:id="@+id/ll_stats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="@dimen/spacing_standard"
-            app:layout_constraintTop_toBottomOf="@id/tv_pokemon_flavour_text"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_pokemon_flavour_text" />
 
         <TextView
             android:id="@+id/tv_evolution_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_standard"
-            android:theme="@style/pokemon_sub_title"
             android:text="@string/evolution"
+            android:theme="@style/pokemon_sub_title"
+            app:layout_constraintBottom_toTopOf="@+id/ll_pokemon_evolution"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,46 +108,94 @@
             android:id="@+id/ll_pokemon_evolution"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="@dimen/spacing_small"
-            app:layout_constraintTop_toBottomOf="@id/tv_evolution_title"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_evolution_title" />
+
+        <TextView
+            android:id="@+id/tv_extras_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/extras"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:theme="@style/pokemon_sub_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_pokemon_evolution" />
+
+        <LinearLayout
+            android:id="@+id/ll_pokemon_extras"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_extras_title" />
+
+        <TextView
+            android:id="@+id/tv_pokedex_numbers_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:text="@string/pokedex_numbers"
+            android:theme="@style/pokemon_sub_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_pokemon_extras" />
+
+        <LinearLayout
+            android:id="@+id/ll_pokedex_numbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_pokedex_numbers_title" />
 
         <TextView
             android:id="@+id/tv_pokemon_move_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_standard"
-            android:theme="@style/pokemon_sub_title"
             android:text="@string/moves"
+            android:theme="@style/pokemon_sub_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_pokemon_evolution" />
+            app:layout_constraintTop_toBottomOf="@+id/ll_pokedex_numbers" />
 
         <TextView
             android:id="@+id/tv_move_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_marginEnd="@dimen/spacing_small"
             android:text="@string/tap_moves"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_pokemon_move_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginTop="@dimen/spacing_small"
-            android:layout_marginEnd="@dimen/spacing_small"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_move_title" />
 
         <LinearLayout
             android:id="@+id/ll_pokemon_moves"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="@dimen/spacing_standard"
-            app:layout_constraintTop_toBottomOf="@id/tv_move_info"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_move_info" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -26,6 +26,6 @@ data class EvolutionChainSpeciesChild(val species: SpeciesChildResponse?)
 data class SpeciesChildResponse(val name: String,
                                 val url: String)
 
-data class PokedexNumbersResponse(val entry_number: Int, val pokedex: PokedexTypeResponse)
+data class PokedexNumbersResponse(val entry_number: Int?, val pokedex: PokedexTypeResponse?)
 
 data class PokedexTypeResponse(val name: String)

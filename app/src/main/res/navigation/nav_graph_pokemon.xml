@@ -29,5 +29,8 @@
         <argument
             android:name="pokemonName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_pokemonDetailsFragment_self"
+            app:destination="@id/pokemonDetailsFragment" />
     </fragment>
 </navigation>

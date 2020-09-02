@@ -22,4 +22,4 @@ data class PokemonType(val name: String, val url: String)
 
 data class PokemonEvolution(val evolutionName: String?, val evolutionUrl: String?)
 
-data class PokemonExtraDetails(val captureRate: Int, val baseHappiness: Int)
+data class PokemonExtraDetails(val captureRate: Int?, val baseHappiness: Int?)

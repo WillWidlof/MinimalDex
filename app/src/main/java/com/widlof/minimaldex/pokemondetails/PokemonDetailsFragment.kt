@@ -5,21 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.widlof.minimaldex.R
+import com.widlof.minimaldex.nationaldex.data.model.PokedexNumbersResponse
 import com.widlof.minimaldex.nationaldex.data.model.Species
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
+import com.widlof.minimaldex.pokemondetails.data.model.PokemonExtraDetails
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonMove
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonStat
 import com.widlof.minimaldex.pokemondetails.type.TypeBackground
+import com.widlof.minimaldex.util.StringUtils.Companion.capitaliseAll
+import kotlinx.android.synthetic.main.dex_numbers.view.*
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 import kotlinx.android.synthetic.main.pokemon_evolution.view.*
+import kotlinx.android.synthetic.main.pokemon_extras.view.*
 import kotlinx.android.synthetic.main.pokemon_move.view.*
 import kotlinx.android.synthetic.main.pokemon_stat.view.*
 
@@ -56,7 +60,7 @@ class PokemonDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val key = arguments?.get(POKEMON_KEY) as String
         val pokemon = PokemonCache.pokemonCache[key]
-        tv_pokemon_name.text = pokemon?.pokemonName?.capitalize()
+        tv_pokemon_name.text = pokemon?.pokemonName?.capitaliseAll()
         iv_front_sprite.setImageBitmap(pokemon?.normalMaleFrontSprite)
         iv_back_sprite.setImageBitmap(pokemon?.normalMaleBackSprite)
         setTypes(pokemon)
@@ -64,6 +68,32 @@ class PokemonDetailsFragment : Fragment() {
         setMoves(pokemon?.moveList)
         setEvolutions(pokemon?.species)
         setFlavourText(pokemon?.species?.flavourText)
+        setExtraDetails(pokemon?.species?.extraDetails)
+        setPokedexNumbers(pokemon?.species?.dexNumbers)
+    }
+
+    private fun setPokedexNumbers(dexNumbers: List<PokedexNumbersResponse>?) {
+        dexNumbers?.let {
+            for (dex in it) {
+                val dexNumView = LayoutInflater.from(requireContext())
+                    .inflate(R.layout.dex_numbers, null).apply {
+                        tv_dex_name.text = dex.pokedex?.name?.capitaliseAll()
+                        tv_dex_no.text = dex.entry_number?.toString()
+                    }
+                ll_pokedex_numbers.addView(dexNumView)
+            }
+        }
+    }
+
+    private fun setExtraDetails(extraDetails: PokemonExtraDetails?) {
+        extraDetails?.let {
+            val extrasView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.pokemon_extras, null).apply {
+                    tv_capture_rate_value.text = it.captureRate?.toString()
+                    tv_base_happiness_value.text = it.baseHappiness?.toString()
+                }
+            ll_pokemon_extras.addView(extrasView)
+        }
     }
 
     private fun setFlavourText(flavourText: String?) {
@@ -80,9 +110,11 @@ class PokemonDetailsFragment : Fragment() {
                 for (evolution in list) {
                     val view = LayoutInflater.from(requireContext())
                         .inflate(R.layout.pokemon_evolution, null).apply {
-                            tv_pokemon_evolution_name.text = evolution.evolutionName?.capitalize()
-                            cl_evolution.setOnClickListener {
-                                //Handle showing evolved form
+                            evolution.evolutionName?.let { s ->
+                                tv_pokemon_evolution_name.text = s.capitalize()
+                                cl_evolution.setOnClickListener {
+                                    //Support for viewing evolutions?
+                                }
                             }
                         }
                     ll_pokemon_evolution.addView(view)
@@ -139,12 +171,15 @@ class PokemonDetailsFragment : Fragment() {
                 val view =
                     LayoutInflater.from(requireContext()).inflate(R.layout.pokemon_stat, null)
                 view.apply {
-                    tv_stat_name.text = stat.name.capitalize()
+                    tv_stat_name.text = stat.name.capitaliseAll()
                     tv_stat_value.text = stat.value
                     val progressColour = statBackground.provideBarColour(stat.name)
                     pgr_stat_value.progressDrawable.setTint(
-                        ContextCompat.getColor(requireContext(),
-                        progressColour))
+                        ContextCompat.getColor(
+                            requireContext(),
+                            progressColour
+                        )
+                    )
                     stat.value?.toInt()?.let {
                         pgr_stat_value.progress = it
                     }
