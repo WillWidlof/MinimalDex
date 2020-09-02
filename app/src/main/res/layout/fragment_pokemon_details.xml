@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/spacing_standard"
+    android:background="@drawable/fragment_background"
     tools:context=".pokemondetails.PokemonDetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
