@@ -69,18 +69,20 @@ class DexRemoteDataSource(
         }
 
     override suspend fun getSprite(spriteUrl: String): NetworkResponse<Bitmap?> =
-        withContext(Dispatchers.IO) {
-            val response = networkRequestSender.makeImageRequest(spriteUrl)
-            return@withContext if (response is NetworkResponse.Success) {
-                if (response.responseBody != null) {
-                    response.responseBody.let {
-                        NetworkResponse.Success(it)
+        suspendCoroutine { continuation ->
+            scope.launch {
+                val response = networkRequestSender.makeImageRequest(spriteUrl)
+                if (response is NetworkResponse.Success) {
+                    if (response.responseBody != null) {
+                        response.responseBody.let {
+                            continuation.resume(NetworkResponse.Success(it))
+                        }
+                    } else {
+                        continuation.resume(NetworkResponse.Error(PARSE_ERROR))
                     }
                 } else {
-                    NetworkResponse.Error(PARSE_ERROR)
+                    continuation.resume(response as NetworkResponse.Error)
                 }
-            } else {
-                response as NetworkResponse.Error
             }
         }
 
