@@ -1,6 +1,7 @@
 package com.widlof.minimaldex.nationaldex.data
 
 import android.graphics.Bitmap
+import androidx.annotation.VisibleForTesting
 import com.widlof.minimaldex.nationaldex.data.model.EvolutionChainResponse
 import com.widlof.minimaldex.nationaldex.data.model.NationalDexResponse
 import com.widlof.minimaldex.nationaldex.data.model.SpeciesResponse
@@ -9,6 +10,10 @@ import com.widlof.minimaldex.network.NetworkResponse
 
 class DexRepository(private val dataSource: DexDataSource): DexDataSource {
     private var nationalDexResponse: NationalDexResponse? = null
+
+    fun setCachedNationalDexResponse(nationalDexResponse: NationalDexResponse) {
+        this.nationalDexResponse = nationalDexResponse
+    }
 
     override suspend fun getNationalDex(): NetworkResponse<NationalDexResponse?> {
         nationalDexResponse?.let {
