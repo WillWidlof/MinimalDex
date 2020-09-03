@@ -27,7 +27,7 @@ class DexRemoteDataSource(
             scope.launch {
                 networkRequestSender.makeJsonRequest(NATION_DEX_URL).apply {
                     if (this is NetworkResponse.Success) {
-                        responseBody.let {
+                        if (responseBody != null) {
                             val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                             val adapter: JsonAdapter<NationalDexResponse> =
                                 moshi.adapter(NationalDexResponse::class.java)
@@ -36,6 +36,8 @@ class DexRemoteDataSource(
                                 pokemonSingle.dexNo = (index + 1).toString()
                             }
                             continuation.resume(NetworkResponse.Success(response))
+                        } else {
+                            continuation.resume(NetworkResponse.Error(PARSE_ERROR))
                         }
                     } else if (this is NetworkResponse.Error) {
                         continuation.resume(NetworkResponse.Error(this.errorCode))
@@ -45,24 +47,24 @@ class DexRemoteDataSource(
         }
 
     override suspend fun getSinglePokemonMainJson(name: String): NetworkResponse<PokemonResponse?> =
-        withContext(Dispatchers.IO) {
-            val url = POKEMON_URL + name.toLowerCase()
-            val response = networkRequestSender.makeJsonRequest(url)
-            return@withContext if (response is NetworkResponse.Success) {
-                if (response.responseBody != null) {
-                    response.responseBody.let {
-                        Log.d("JSON RESPONSE:", response.responseBody)
+        suspendCoroutine { continuation ->
+            scope.launch {
+                val url = POKEMON_URL + name.toLowerCase()
+                val response = networkRequestSender.makeJsonRequest(url)
+                if (response is NetworkResponse.Success) {
+                    if (response.responseBody != null) {
                         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                         val adapter: JsonAdapter<PokemonResponse> =
                             moshi.adapter(PokemonResponse::class.java)
                         val result = adapter.fromJson(response.responseBody)
-                        NetworkResponse.Success(result)
+                        continuation.resume(NetworkResponse.Success(result))
+                    } else {
+                        continuation.resume(NetworkResponse.Error(PARSE_ERROR))
                     }
                 } else {
-                    NetworkResponse.Error(PARSE_ERROR)
+                    response as NetworkResponse.Error
+                    continuation.resume(NetworkResponse.Error(response.errorCode))
                 }
-            } else {
-                response as NetworkResponse.Error
             }
         }
 
