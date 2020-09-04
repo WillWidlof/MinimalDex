@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import com.widlof.minimaldex.nationaldex.data.model.EvolutionChainResponse
 import com.widlof.minimaldex.nationaldex.data.model.Species
 import com.widlof.minimaldex.nationaldex.data.model.SpeciesResponse
-import com.widlof.minimaldex.network.NetworkResponse
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
 import com.widlof.minimaldex.pokemondetails.data.model.*
 
@@ -14,46 +13,42 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
             return it
         }
         val response = repository.getSinglePokemonMainJson(name)
-        if (response is NetworkResponse.Success) {
-            response.responseBody?.let {
-                val frontSprite = getSprite(it.sprites.front_default)
-                val backSprite = getSprite(it.sprites.back_default)
-                val types = getTypes(it.types)
-                val moves = getMoves(it.moves)
-                val stats = getStats(it.stats)
-                val species = getSpecies(it.species)
+        response?.let {
+            val frontSprite = getSprite(it.sprites.front_default)
+            val backSprite = getSprite(it.sprites.back_default)
+            val types = getTypes(it.types)
+            val moves = getMoves(it.moves)
+            val stats = getStats(it.stats)
+            val species = getSpecies(it.species)
 
-                with(response.responseBody) {
-                    val pokemon = PokemonSingle(
-                        name,
-                        frontSprite,
-                        backSprite,
-                        sprites,
-                        moves,
-                        stats,
-                        types,
-                        species
-                    )
-                    PokemonCache.pokemonCache[name] = pokemon
-                    return PokemonCache.pokemonCache[name]
-                }
+            with(response) {
+                val pokemon = PokemonSingle(
+                    name,
+                    frontSprite,
+                    backSprite,
+                    sprites,
+                    moves,
+                    stats,
+                    types,
+                    species
+                )
+                PokemonCache.pokemonCache[name] = pokemon
+                return PokemonCache.pokemonCache[name]
             }
-            return null
         }
         return null
-
     }
 
     private suspend fun getSpecies(speciesResponse: PokemonSpeciesResponse): Species? {
         val speciesResponse = repository.getSpeciesBase(speciesResponse.url)
-        if (speciesResponse is NetworkResponse.Success && speciesResponse.responseBody != null) {
-            val extraDetails = getExtraDetails(speciesResponse.responseBody)
-            val dexNumbers = speciesResponse.responseBody.pokedex_numbers
+        if (speciesResponse != null) {
+            val extraDetails = getExtraDetails(speciesResponse)
+            val dexNumbers = speciesResponse.pokedex_numbers
             var evoList: MutableList<PokemonEvolution> = mutableListOf<PokemonEvolution>()
-            with(speciesResponse.responseBody) {
+            with(speciesResponse) {
                 val evolutionChain = repository.getEvolutionChain(this.evolution_chain.url)
-                if (evolutionChain is NetworkResponse.Success && evolutionChain.responseBody != null) {
-                    evoList = buildEvolutionList(evolutionChain.responseBody)
+                if (evolutionChain != null) {
+                    evoList = buildEvolutionList(evolutionChain)
                 }
                 return Species(this.flavor_text_entries.first().flavor_text, evoList, extraDetails, dexNumbers)
             }
@@ -116,12 +111,7 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource) {
 
     private suspend fun getSprite(url: String?): Bitmap? {
         return if (url != null) {
-            val response = repository.getSprite(url)
-            if (response is NetworkResponse.Success) {
-                response.responseBody
-            } else {
-                null
-            }
+            repository.getSprite(url)
         } else {
             null
         }

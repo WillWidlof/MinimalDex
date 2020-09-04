@@ -6,14 +6,13 @@ import com.widlof.minimaldex.nationaldex.data.DexDataSource
 import com.widlof.minimaldex.nationaldex.data.GetSinglePokemonInteractor
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
-import com.widlof.minimaldex.network.NetworkResponse
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.lang.NullPointerException
 
-class NationalDexViewModel(private val repository: DexDataSource,
-                           private val getSinglePokemonInteractor: GetSinglePokemonInteractor)
-    : ViewModel() {
+class NationalDexViewModel(
+    private val repository: DexDataSource,
+    private val getSinglePokemonInteractor: GetSinglePokemonInteractor
+) : ViewModel() {
 
     private val scope = MainScope()
     var pokemonList: MutableLiveData<List<PokemonListSingle>> = MutableLiveData()
@@ -22,15 +21,12 @@ class NationalDexViewModel(private val repository: DexDataSource,
 
     fun getPokemonList() {
         scope.launch {
-            val dexResponse =
+            runCatching {
                 repository.getNationalDex()
-            when (dexResponse) {
-                is NetworkResponse.Success -> {
-                    pokemonList.value = dexResponse.responseBody?.getPokemonList()
-                }
-                is NetworkResponse.Error -> {
-                    error = dexResponse.errorCode
-                }
+            }.onSuccess {
+                pokemonList.value = it?.getPokemonList()
+            }.onFailure {
+                error = it.message
             }
         }
     }
