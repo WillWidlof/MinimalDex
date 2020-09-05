@@ -19,10 +19,8 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:constraint_referenced_ids="tv_pokemon_name,
-            tv_pokemon_type_one,
-            tv_pokemon_type_two,
-            iv_front_sprite,
-            iv_back_sprite,
+            inc_pokemon_type,
+            inc_sprites,
             tv_pokemon_flavour_text,
             ll_stats,
             tv_evolution_title,
@@ -65,23 +63,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_pokemon_name" />
 
-        <ImageView
-            android:id="@+id/iv_front_sprite"
-            android:layout_width="@dimen/sprite_size"
-            android:layout_height="@dimen/sprite_size"
-            app:layout_constraintEnd_toStartOf="@+id/iv_back_sprite"
-            app:layout_constraintHorizontal_bias="0.5"
+        <include layout="@layout/pokemon_sprite"
+            android:id="@+id/inc_sprites"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inc_pokemon_type" />
-
-        <ImageView
-            android:id="@+id/iv_back_sprite"
-            android:layout_width="@dimen/sprite_size"
-            android:layout_height="@dimen/sprite_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_front_sprite"
-            app:layout_constraintTop_toBottomOf="@+id/inc_pokemon_type" />
 
         <TextView
             android:id="@+id/tv_pokemon_flavour_text"
@@ -91,7 +79,7 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_front_sprite" />
+            app:layout_constraintTop_toBottomOf="@id/inc_sprites" />
 
         <LinearLayout
             android:id="@+id/ll_stats"

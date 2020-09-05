@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 import kotlinx.android.synthetic.main.pokemon_evolution.view.*
 import kotlinx.android.synthetic.main.pokemon_extras.view.*
 import kotlinx.android.synthetic.main.pokemon_move.view.*
+import kotlinx.android.synthetic.main.pokemon_sprite.view.*
 import kotlinx.android.synthetic.main.pokemon_stat.view.*
 import kotlinx.android.synthetic.main.pokemon_type.view.*
 
@@ -66,8 +67,12 @@ class PokemonDetailsFragment : Fragment() {
         val key = arguments?.get(POKEMON_KEY) as String
         val pokemon = PokemonCache.pokemonCache[key]
         tv_pokemon_name.text = pokemon?.pokemonName?.capitaliseAll()
-        iv_front_sprite.setImageBitmap(pokemon?.normalMaleFrontSprite)
-        iv_back_sprite.setImageBitmap(pokemon?.normalMaleBackSprite)
+        inc_sprites.iv_front_sprite.setImageBitmap(pokemon?.normalMaleFrontSprite)
+        if (pokemon?.normalMaleBackSprite != null) {
+            inc_sprites.iv_back_sprite.setImageBitmap(pokemon.normalMaleBackSprite)
+        } else {
+            inc_sprites.iv_back_sprite.visibility = View.GONE
+        }
         setTypes(pokemon)
         setStats(pokemon?.statList)
         setMoves(pokemon?.moveList)
