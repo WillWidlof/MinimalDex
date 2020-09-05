@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            tools:visibility="visible"
             app:constraint_referenced_ids="tv_pokemon_name,
             tv_pokemon_type_one,
             tv_pokemon_type_two,
@@ -64,6 +65,7 @@
             android:paddingEnd="@dimen/spacing_standard"
             android:paddingBottom="@dimen/spacing_small"
             android:textAlignment="center"
+            tools:text="FIRE"
             app:layout_constraintEnd_toStartOf="@+id/tv_pokemon_type_two"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +81,8 @@
             android:paddingEnd="@dimen/spacing_standard"
             android:paddingBottom="@dimen/spacing_small"
             android:textAlignment="center"
+            tools:visibility="gone"
+            tools:text="WATER"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tv_pokemon_type_one"

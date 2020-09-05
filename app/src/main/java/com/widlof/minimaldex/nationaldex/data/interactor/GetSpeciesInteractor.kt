@@ -20,7 +20,13 @@ class GetSpeciesInteractor(private val repository: DexDataSource,
                 if (evolutionChain != null) {
                     evoList = getEvolutionListInteractor.buildEvolutionList(evolutionChain)
                 }
-                return Species(this.flavor_text_entries.first().flavor_text, evoList, extraDetails, dexNumbers)
+                var flavourText = ""
+                if (flavor_text_entries != null && flavor_text_entries.isNotEmpty()) {
+                     flavourText = flavor_text_entries.filter {
+                        it.language.name == ENGLISH
+                    }[0].flavor_text
+                }
+                return Species(flavourText, evoList, extraDetails, dexNumbers)
             }
         }
         return null
@@ -28,5 +34,9 @@ class GetSpeciesInteractor(private val repository: DexDataSource,
 
     private fun getExtraDetails(responseBody: SpeciesResponse): PokemonExtraDetails {
         return PokemonExtraDetails(responseBody.capture_rate, responseBody.base_happiness)
+    }
+
+    companion object {
+        private const val ENGLISH = "en"
     }
 }
