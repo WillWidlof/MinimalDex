@@ -1,25 +1,23 @@
 package com.widlof.minimaldex.nationaldex.data.interactor
 
-import android.graphics.Bitmap
 import com.widlof.minimaldex.nationaldex.data.DexDataSource
 import com.widlof.minimaldex.nationaldex.data.DexRemoteDataSource
 import com.widlof.minimaldex.nationaldex.data.DexRepository
-import com.widlof.minimaldex.nationaldex.data.model.EvolutionChainResponse
-import com.widlof.minimaldex.nationaldex.data.model.Species
-import com.widlof.minimaldex.nationaldex.data.model.SpeciesResponse
 import com.widlof.minimaldex.network.NetworkClientBuilder
 import com.widlof.minimaldex.network.NetworkRequestBuilder
 import com.widlof.minimaldex.network.NetworkRequestSender
 import com.widlof.minimaldex.pokemondetails.data.PokemonCache
-import com.widlof.minimaldex.pokemondetails.data.model.*
+import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import kotlinx.coroutines.Dispatchers
 
-class GetSinglePokemonInteractor(private val repository: DexDataSource,
-                                 private val getSpriteInteractor: GetSpriteInteractor,
-                                 private val getTypesInteractor: GetTypesInteractor,
-                                 private val getMovesInteractor: GetMovesInteractor,
-                                 private val getStatsInteractor: GetStatsInteractor,
-                                 private val getSpeciesInteractor: GetSpeciesInteractor) {
+class GetSinglePokemonInteractor(
+    private val repository: DexDataSource,
+    private val getSpriteInteractor: GetSpriteInteractor,
+    private val getTypesInteractor: GetTypesInteractor,
+    private val getMovesInteractor: GetMovesInteractor,
+    private val getStatsInteractor: GetStatsInteractor,
+    private val getSpeciesInteractor: GetSpeciesInteractor
+) {
     suspend fun getSinglePokemon(name: String): PokemonSingle? {
         PokemonCache.pokemonCache[name]?.let {
             return it
@@ -55,10 +53,12 @@ class GetSinglePokemonInteractor(private val repository: DexDataSource,
         fun newInstance(): GetSinglePokemonInteractor {
             val dispatcher = Dispatchers.IO
             val networkRequestSender = NetworkRequestSender(
-                dispatcher, NetworkRequestBuilder(), NetworkClientBuilder())
+                dispatcher, NetworkRequestBuilder(), NetworkClientBuilder()
+            )
             val dataSource = DexRemoteDataSource(dispatcher, networkRequestSender)
             val repository = DexRepository(dataSource)
-            return GetSinglePokemonInteractor(repository,
+            return GetSinglePokemonInteractor(
+                repository,
                 GetSpriteInteractor(repository),
                 GetTypesInteractor(),
                 GetMovesInteractor(),
