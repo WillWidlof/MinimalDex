@@ -3,7 +3,7 @@ package com.widlof.minimaldex.nationaldex
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.widlof.minimaldex.nationaldex.data.DexDataSource
-import com.widlof.minimaldex.nationaldex.data.GetSinglePokemonInteractor
+import com.widlof.minimaldex.nationaldex.data.interactor.GetSinglePokemonInteractor
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import kotlinx.coroutines.MainScope

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.widlof.minimaldex.nationaldex.data.DexRemoteDataSource
 import com.widlof.minimaldex.nationaldex.data.DexRepository
-import com.widlof.minimaldex.nationaldex.data.GetSinglePokemonInteractor
+import com.widlof.minimaldex.nationaldex.data.interactor.GetSinglePokemonInteractor
 import com.widlof.minimaldex.network.NetworkClientBuilder
 import com.widlof.minimaldex.network.NetworkRequestBuilder
 import com.widlof.minimaldex.network.NetworkRequestSender
@@ -19,7 +19,7 @@ class NationalDexViewModelFactory: ViewModelProvider.Factory {
             val remoteDataSource = DexRemoteDataSource(Dispatchers.IO,
                 NetworkRequestSender(Dispatchers.IO, NetworkRequestBuilder(), NetworkClientBuilder()))
             val repository = DexRepository(remoteDataSource)
-            val getSinglePokemonInteractor = GetSinglePokemonInteractor(repository)
+            val getSinglePokemonInteractor = GetSinglePokemonInteractor.newInstance()
             NationalDexViewModel(repository, getSinglePokemonInteractor) as T
         } else {
             throw ClassCastException("No matching view model found")
