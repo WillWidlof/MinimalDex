@@ -15,10 +15,10 @@ data class SpeciesFlavourVersionResponse(val name: String,
 
 data class EvolutionChainResponse(val chain: EvolutionChainEvolvesToBase)
 
-data class EvolutionChainEvolvesToBase(val evolves_to: List<EvolutionChainEvolvesToChild>,
+data class EvolutionChainEvolvesToBase(val evolves_to: List<EvolutionChainEvolvesToChild>?,
                                        val species: SpeciesChildResponse?)
 
-data class EvolutionChainEvolvesToChild(val evolves_to: List<EvolutionChainSpeciesChild>,
+data class EvolutionChainEvolvesToChild(val evolves_to: List<EvolutionChainSpeciesChild>?,
                                         val species: SpeciesChildResponse?)
 
 data class EvolutionChainSpeciesChild(val species: SpeciesChildResponse?)
