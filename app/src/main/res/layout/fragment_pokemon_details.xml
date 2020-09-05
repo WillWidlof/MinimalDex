@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:visibility="visible"
             app:constraint_referenced_ids="tv_pokemon_name,
             tv_pokemon_type_one,
             tv_pokemon_type_two,
@@ -31,18 +30,19 @@
             tv_extras_title,
             ll_pokemon_extras,
             tv_pokedex_numbers_title,
-            ll_pokedex_numbers, tv_pokemon_move_title, tv_move_info"/>
+            ll_pokedex_numbers, tv_pokemon_move_title, tv_move_info"
+            tools:visibility="visible" />
 
         <ProgressBar
             android:id="@+id/pgr_loading"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            style="?android:attr/progressBarStyleHorizontal"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_pokemon_name"
@@ -55,38 +55,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_pokemon_type_one"
-            android:layout_width="@dimen/type_width"
+        <include layout="@layout/pokemon_type"
+            android:id="@+id/inc_pokemon_type"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_standard"
-            android:paddingStart="@dimen/spacing_standard"
-            android:paddingTop="@dimen/spacing_small"
-            android:paddingEnd="@dimen/spacing_standard"
-            android:paddingBottom="@dimen/spacing_small"
             android:textAlignment="center"
-            tools:text="FIRE"
-            app:layout_constraintEnd_toStartOf="@+id/tv_pokemon_type_two"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_pokemon_name" />
-
-        <TextView
-            android:id="@+id/tv_pokemon_type_two"
-            android:layout_width="@dimen/type_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_standard"
-            android:paddingStart="@dimen/spacing_standard"
-            android:paddingTop="@dimen/spacing_small"
-            android:paddingEnd="@dimen/spacing_standard"
-            android:paddingBottom="@dimen/spacing_small"
-            android:textAlignment="center"
-            tools:visibility="gone"
-            tools:text="WATER"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tv_pokemon_type_one"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_name" />
 
         <ImageView
             android:id="@+id/iv_front_sprite"
@@ -95,7 +72,7 @@
             app:layout_constraintEnd_toStartOf="@+id/iv_back_sprite"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_pokemon_type_one" />
+            app:layout_constraintTop_toBottomOf="@id/inc_pokemon_type" />
 
         <ImageView
             android:id="@+id/iv_back_sprite"
@@ -104,7 +81,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/iv_front_sprite"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_type_one" />
+            app:layout_constraintTop_toBottomOf="@+id/inc_pokemon_type" />
 
         <TextView
             android:id="@+id/tv_pokemon_flavour_text"
@@ -154,8 +131,8 @@
             android:id="@+id/tv_extras_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/extras"
             android:layout_marginTop="@dimen/spacing_standard"
+            android:text="@string/extras"
             android:theme="@style/pokemon_sub_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

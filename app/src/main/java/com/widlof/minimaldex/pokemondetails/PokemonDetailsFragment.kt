@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.pokemon_evolution.view.*
 import kotlinx.android.synthetic.main.pokemon_extras.view.*
 import kotlinx.android.synthetic.main.pokemon_move.view.*
 import kotlinx.android.synthetic.main.pokemon_stat.view.*
+import kotlinx.android.synthetic.main.pokemon_type.view.*
 
 
 class PokemonDetailsFragment : Fragment() {
@@ -203,12 +204,12 @@ class PokemonDetailsFragment : Fragment() {
         typeBackground = TypeBackground(requireContext())
         pokemon?.typeList?.let {
             if (it.isNotEmpty()) {
-                tv_pokemon_type_one.apply {
+                inc_pokemon_type.tv_pokemon_type_one.apply {
                     text = it[0].name.capitalize()
                     background = typeBackground.provideBackground(it[0].name)
                 }
             }
-            tv_pokemon_type_two.apply {
+            inc_pokemon_type.tv_pokemon_type_two.apply {
                 if (it.size > 1) {
                     text = it[1].name.capitalize()
                     background = typeBackground.provideBackground(it[1].name)
