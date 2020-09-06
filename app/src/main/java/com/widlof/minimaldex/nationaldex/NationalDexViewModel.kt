@@ -6,6 +6,7 @@ import com.widlof.minimaldex.nationaldex.data.DexDataSource
 import com.widlof.minimaldex.nationaldex.data.interactor.GetSinglePokemonInteractor
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
+import com.widlof.minimaldex.ui.main.LoadingReasons
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -18,6 +19,11 @@ class NationalDexViewModel(
     var pokemonList: MutableLiveData<List<PokemonListSingle>> = MutableLiveData()
     var pokemon: MutableLiveData<PokemonSingle> = MutableLiveData()
     private var error: String? = null
+    val isLoadingEvolution: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        isLoadingEvolution.value = true
+    }
 
     fun getPokemonList() {
         scope.launch {
@@ -32,6 +38,7 @@ class NationalDexViewModel(
     }
 
     fun getSinglePokemon(name: String) {
+        isLoadingEvolution.value = true
         scope.launch {
             val singlePokemonResponse = getSinglePokemonInteractor.getSinglePokemon(name)
             if (singlePokemonResponse != null) {
@@ -40,5 +47,17 @@ class NationalDexViewModel(
                 throw NullPointerException("Well your response is broken")
             }
         }
+    }
+
+    fun dexLoadComplete() {
+        isLoadingEvolution.value = false
+    }
+
+    fun getLoadingReason(): String {
+        return LoadingReasons.values()
+            .toList()
+            .shuffled()
+            .first()
+            .reason
     }
 }

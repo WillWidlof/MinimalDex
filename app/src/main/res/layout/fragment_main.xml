@@ -16,19 +16,6 @@
             app:constraint_referenced_ids="edt_filter_dex,
             rv_national_dex, fab, fab_scroll_top, fab_scroll_bottom"/>
 
-        <ProgressBar
-            android:id="@+id/pgr_loading"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            style="@android:style/Widget.Holo.ProgressBar.Horizontal"
-            android:indeterminate="true"
-            android:visibility="gone"
-            android:indeterminateTint="@color/accent_red"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
         <EditText
             android:id="@+id/edt_filter_dex"
             android:layout_width="match_parent"

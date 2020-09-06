@@ -40,8 +40,6 @@ class PokemonDetailsFragment : Fragment() {
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var typeBackground: TypeBackground
     private var isMovesExpanded = false
-    private var isLoadingEvolution = false
-    private var pokemonClicked = ""
     private var loadingBar: Snackbar? = null
 
     override fun onCreateView(

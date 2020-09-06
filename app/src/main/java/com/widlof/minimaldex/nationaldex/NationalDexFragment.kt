@@ -11,10 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.widlof.minimaldex.R
 import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
+import com.widlof.minimaldex.util.ColourUtils
 import com.widlof.minimaldex.util.ViewUtils
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.cl_grp_pokemon_details
+import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 import java.util.*
 
 class NationalDexFragment : Fragment() {
@@ -23,6 +27,7 @@ class NationalDexFragment : Fragment() {
     private lateinit var nationalDexAdapter: NationalDexAdapter
     private var baseList: List<PokemonListSingle> = listOf()
     private var isMenuOpen = false
+    private var loadingBar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +54,27 @@ class NationalDexFragment : Fragment() {
                 notifyDataSetChanged()
             }
             cl_grp_pokemon_details.visibility = View.VISIBLE
-            pgr_loading.visibility = View.GONE
+            nationalDexViewModel.dexLoadComplete()
         })
         nationalDexViewModel.pokemon.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(
                 NationalDexFragmentDirections
                     .actionNationalDexFragmentToPokemonDetailsFragment(it.pokemonName)
             )
+        })
+        nationalDexViewModel.isLoadingEvolution.observe(viewLifecycleOwner, Observer {isLoading ->
+            if (isLoading) {
+                loadingBar = Snackbar
+                    .make(cl_grp_pokemon_details, nationalDexViewModel.getLoadingReason(), Snackbar.LENGTH_INDEFINITE)
+                    .setTextColor(ColourUtils.getColour(requireContext(), R.color.textColour))
+                    .setDuration(8000).also {
+                        it.show()
+                    }
+            } else {
+                loadingBar?.let {
+                    it.dismiss()
+                }
+            }
         })
         setUpRecycler()
         setUpFilter()
@@ -134,8 +153,6 @@ class NationalDexFragment : Fragment() {
             nationalDexAdapter =
                 NationalDexAdapter(requireContext(), mutableListOf(), object : NationalDexListener {
                     override fun onPokemonClicked(pokemon: PokemonListSingle) {
-                        cl_grp_pokemon_details.visibility = View.GONE
-                        pgr_loading.visibility = View.VISIBLE
                         nationalDexViewModel.getSinglePokemon(pokemon.name.toLowerCase(Locale.ENGLISH))
                     }
                 })
