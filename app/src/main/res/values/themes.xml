@@ -12,7 +12,7 @@
         <item name="android:elevation">0dp</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar_dark</item>
-        <!-- Customize your theme here. -->
+        <item name="snackbarStyle">@style/loading_bar</item>
     </style>
 
     <style name="Theme.MinimalDex.NoActionBar">
@@ -31,6 +31,11 @@
 
     <style name="pokemon_sub_title">
         <item name="android:textSize">@dimen/pokemon_sub_title_size</item>
+        <item name="android:textColor">@color/textColour</item>
+    </style>
+
+    <style name="loading_bar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:background">@color/background_surface</item>
         <item name="android:textColor">@color/textColour</item>
     </style>
 </resources>

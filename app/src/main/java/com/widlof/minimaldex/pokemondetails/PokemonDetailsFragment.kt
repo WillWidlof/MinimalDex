@@ -4,24 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.widlof.minimaldex.R
-import com.widlof.minimaldex.nationaldex.NationalDexViewModel
-import com.widlof.minimaldex.nationaldex.NationalDexViewModelFactory
+import com.widlof.minimaldex.nationaldex.DexViewModelFactory
 import com.widlof.minimaldex.nationaldex.data.model.PokedexNumbersResponse
 import com.widlof.minimaldex.nationaldex.data.model.Species
-import com.widlof.minimaldex.pokemondetails.data.PokemonCache
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonExtraDetails
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonMove
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonSingle
 import com.widlof.minimaldex.pokemondetails.data.model.PokemonStat
 import com.widlof.minimaldex.pokemondetails.type.TypeBackground
+import com.widlof.minimaldex.util.ColourUtils
 import com.widlof.minimaldex.util.StringUtils.Companion.capitaliseAll
 import kotlinx.android.synthetic.main.dex_numbers.view.*
 import kotlinx.android.synthetic.main.fragment_pokemon_details.*
@@ -38,7 +40,9 @@ class PokemonDetailsFragment : Fragment() {
     private lateinit var viewModel: PokemonDetailsViewModel
     private lateinit var typeBackground: TypeBackground
     private var isMovesExpanded = false
+    private var isLoadingEvolution = false
     private var pokemonClicked = ""
+    private var loadingBar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +53,8 @@ class PokemonDetailsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PokemonDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this, DexViewModelFactory()
+        ).get(PokemonDetailsViewModel::class.java)
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -60,35 +65,66 @@ class PokemonDetailsFragment : Fragment() {
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        setUpObservers()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setUpObservers() {
         val key = arguments?.get(POKEMON_KEY) as String
-        val pokemon = PokemonCache.pokemonCache[key]
-        tv_pokemon_name.text = pokemon?.pokemonName?.capitaliseAll()
-        inc_sprites.iv_front_sprite.setImageBitmap(pokemon?.normalMaleFrontSprite)
-        if (pokemon?.normalMaleBackSprite != null) {
-            inc_sprites.iv_back_sprite.setImageBitmap(pokemon.normalMaleBackSprite)
-        } else {
-            inc_sprites.iv_back_sprite.visibility = View.GONE
-        }
-        setTypes(pokemon)
-        setStats(pokemon?.statList)
-        setMoves(pokemon?.moveList)
-        setEvolutions(pokemon?.species)
-        setFlavourText(pokemon?.species?.flavourText)
-        setExtraDetails(pokemon?.species?.extraDetails)
-        setPokedexNumbers(pokemon?.species?.dexNumbers)
-        setLoadComplete()
+        observePokemonDetails()
+        observeLoadingState()
+        viewModel.findPokemon(key)
+    }
+
+    private fun observeLoadingState() {
+        viewModel.isLoadingEvolution.observe(viewLifecycleOwner, Observer { isLoading ->
+            if (isLoading) {
+                loadingBar = Snackbar
+                    .make(cl_grp_pokemon_details, viewModel.getLoadingReason(), Snackbar.LENGTH_INDEFINITE)
+                    .setTextColor(ColourUtils.getColour(requireContext(), R.color.textColour))
+                    .setDuration(8000).also {
+                        it.show()
+                    }
+            } else {
+                loadingBar?.let {
+                    it.dismiss()
+                }
+            }
+        })
+    }
+
+    private fun observePokemonDetails() {
+        viewModel.pokemon.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                isMovesExpanded = false
+                tv_pokemon_name.text = it.pokemonName.capitaliseAll()
+                inc_sprites.iv_front_sprite.setImageBitmap(it.normalMaleFrontSprite)
+                if (it.normalMaleBackSprite != null) {
+                    inc_sprites.iv_back_sprite.setImageBitmap(it.normalMaleBackSprite)
+                } else {
+                    inc_sprites.iv_back_sprite.visibility = View.GONE
+                }
+                setTypes(it)
+                setStats(it.statList)
+                setMoves(it.moveList)
+                setEvolutions(it.species)
+                setFlavourText(it.species?.flavourText)
+                setExtraDetails(it.species?.extraDetails)
+                setPokedexNumbers(it.species?.dexNumbers)
+                setLoadComplete()
+            } else {
+                //missing Error case
+            }
+        })
     }
 
     private fun setLoadComplete() {
         cl_grp_pokemon_details.visibility = View.VISIBLE
         pgr_loading.visibility = View.GONE
+        viewModel.loadingEvolutionComplete()
     }
 
     private fun setPokedexNumbers(dexNumbers: List<PokedexNumbersResponse>?) {
+        ll_pokedex_numbers.removeAllViews()
         dexNumbers?.let {
             for (dex in it) {
                 val dexNumView = LayoutInflater.from(requireContext())
@@ -102,6 +138,7 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun setExtraDetails(extraDetails: PokemonExtraDetails?) {
+        ll_pokemon_extras.removeAllViews()
         extraDetails?.let {
             val extrasView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.pokemon_extras, null).apply {
@@ -121,15 +158,18 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun setEvolutions(species: Species?) {
+        ll_pokemon_evolution.removeAllViews()
         species?.let {
             it.evolutions?.let { list ->
                 for (evolution in list) {
                     val view = LayoutInflater.from(requireContext())
                         .inflate(R.layout.pokemon_evolution, null).apply {
-                            evolution.evolutionName?.let { s ->
-                                tv_pokemon_evolution_name.text = s.capitalize()
+                            evolution.evolutionName?.let { pokemonName ->
+                                tv_pokemon_evolution_name.text = pokemonName.capitalize()
                                 cl_evolution.setOnClickListener {
-                                    //Support for viewing evolutions?
+                                    if (!viewModel.isLoadingEvolution.value!!) {
+                                        viewModel.getPokemonEvolvedForm(pokemonName)
+                                    }
                                 }
                             }
                         }
@@ -140,6 +180,7 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun setMoves(moveList: List<PokemonMove>?) {
+        ll_pokemon_moves.removeAllViews()
         moveList?.let {
             val listOfList = it.chunked(2)
             for (list in listOfList) {
@@ -181,6 +222,7 @@ class PokemonDetailsFragment : Fragment() {
     }
 
     private fun setStats(statList: List<PokemonStat>?) {
+        ll_stats.removeAllViews()
         val statBackground = StatBarBackground(requireContext())
         statList?.let {
             for (stat in statList) {

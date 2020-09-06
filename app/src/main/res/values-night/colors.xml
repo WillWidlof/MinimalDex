@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="accent">#121212</color>
     <color name="status_bar_dark">#121212</color>
-
-
-
     <color name="accent_red">#F93318</color>
     <color name="background_surface">#121212</color>
     <color name="textColour">#FFFFFF</color>
+    <color name="design_snackbar_background_color" tools:override="true">@color/background_surface</color>
 </resources>

@@ -12,11 +12,7 @@ class DrawableUtils {
             return ShapeDrawable(
                 RoundRectShape(floatArrayOf(r, r, r, r, r, r, r, r), null, null)
             ).apply {
-                paint.color = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    context.getColor(color)
-                } else {
-                    context.resources.getColor(color)
-                }
+                paint.color = ColourUtils.getColour(context, color)
             }
         }
     }

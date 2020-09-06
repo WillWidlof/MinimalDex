@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="accent">#121212</color>
@@ -43,4 +43,6 @@
     <color name="speed_background">#6b1c60</color>
     <color name="default_stat">#A1A1A1</color>
     <color name="default_background">#656563</color>
+
+    <color name="design_snackbar_background_color" tools:override="true">@color/background_surface</color>
 </resources>
