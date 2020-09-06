@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar_dark</item>
         <item name="android:elevation">0dp</item>
+        <item name="android:textColor">@color/textColour</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/background_surface</item>
         <item name="snackbarStyle">@style/loading_bar</item>
