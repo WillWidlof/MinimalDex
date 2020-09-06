@@ -10,6 +10,7 @@
         <item name="colorSecondaryVariant">@color/black</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:elevation">0dp</item>
+        <item name="android:textColor">@color/textColour</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar_dark</item>
         <item name="snackbarStyle">@style/loading_bar</item>
@@ -26,6 +27,10 @@
 
     <style name="pokemon_title">
         <item name="android:textSize">@dimen/sub_title_size</item>
+        <item name="android:textColor">@color/textColour</item>
+    </style>
+
+    <style name="general_text">
         <item name="android:textColor">@color/textColour</item>
     </style>
 
