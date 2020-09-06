@@ -7,12 +7,12 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.navigation.fragment.NavHostFragment
 import com.widlof.minimaldex.R
 import com.widlof.minimaldex.items.ItemListFragment
-import com.widlof.minimaldex.nationaldex.NationalDexFragment
+import com.widlof.minimaldex.more.MoreFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.tab_home,
-        R.string.tab_items,
-        R.string.tab_settings
+//        R.string.tab_items,
+        R.string.tab_more
 )
 
 /**
@@ -27,17 +27,17 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
         // Return a PlaceholderFragment (defined as a static inner class below).
         return when(position) {
             0 -> createNationalDexFromGraph()
-            1 -> ItemListFragment.newInstance()
+            1 -> createMoreFromGraph()
             else -> ItemListFragment.newInstance()
         }
     }
 
     private fun createNationalDexFromGraph(): Fragment {
         return NavHostFragment.create(R.navigation.nav_graph_pokemon)
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.nav_host, finalHost)
-//            .setPrimaryNavigationFragment(finalHost) // equivalent to app:defaultNavHost="true"
-//            .commit()
+    }
+
+    private fun createMoreFromGraph(): Fragment {
+        return NavHostFragment.create(R.navigation.nav_graph_more)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -45,7 +45,6 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager)
     }
 
     override fun getCount(): Int {
-        // Show 2 total pages.
-        return 3
+        return TAB_TITLES.size
     }
 }

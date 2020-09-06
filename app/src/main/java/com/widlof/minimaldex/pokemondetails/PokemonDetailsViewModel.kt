@@ -19,23 +19,25 @@ class PokemonDetailsViewModel(private val getSinglePokemonInteractor: GetSingleP
         isLoadingEvolution.value = false
     }
 
-    fun findPokemon(pokemonName: String) {
+    fun findLoadedPokemon(pokemonName: String) {
         pokemon.value = PokemonCache.pokemonCache[pokemonName]
     }
 
     fun getPokemonEvolvedForm(pokemonName: String) {
-        isLoadingEvolution.value = true
-        if (PokemonCache.pokemonCache.containsKey(pokemonName)) {
-            pokemon.value = PokemonCache.pokemonCache[pokemonName]
-        } else {
-            //Snackbar?
-            scope.launch {
-                runCatching {
-                    getSinglePokemonInteractor.getSinglePokemon(pokemonName)
-                }.onSuccess {
-                    pokemon.value = it
-                }.onFailure {
-                    //Not needed displayed Pokemon will remain the same
+        if (pokemon.value == null || !(pokemon.value?.pokemonName
+                ?.toLowerCase().equals(pokemonName.toLowerCase()))) {
+            isLoadingEvolution.value = true
+            if (PokemonCache.pokemonCache.containsKey(pokemonName)) {
+                pokemon.value = PokemonCache.pokemonCache[pokemonName]
+            } else {
+                scope.launch {
+                    runCatching {
+                        getSinglePokemonInteractor.getSinglePokemon(pokemonName)
+                    }.onSuccess {
+                        pokemon.value = it
+                    }.onFailure {
+                        //Not needed displayed Pokemon will remain the same
+                    }
                 }
             }
         }

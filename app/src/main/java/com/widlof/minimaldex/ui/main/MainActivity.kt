@@ -20,6 +20,5 @@ class MainActivity : AppCompatActivity() {
         val tabs: TabLayout = findViewById(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         app_bar.elevation = 0f
-
     }
 }

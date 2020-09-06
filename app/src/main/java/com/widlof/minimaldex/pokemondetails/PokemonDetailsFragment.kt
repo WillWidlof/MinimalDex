@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -56,6 +54,7 @@ class PokemonDetailsFragment : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
+                    val destination = findNavController().currentDestination
                     findNavController().apply {
                         navigateUp()
                         popBackStack(R.id.action_nationalDexFragment_to_pokemonDetailsFragment, true)
@@ -70,7 +69,7 @@ class PokemonDetailsFragment : Fragment() {
         val key = arguments?.get(POKEMON_KEY) as String
         observePokemonDetails()
         observeLoadingState()
-        viewModel.findPokemon(key)
+        viewModel.findLoadedPokemon(key)
     }
 
     private fun observeLoadingState() {

@@ -2,7 +2,7 @@
     <string name="app_name">MinimalDex</string>
     <string name="tab_home">Home</string>
     <string name="tab_items">Items</string>
-    <string name="tab_settings">Settings</string>
+    <string name="tab_more">More</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="moves">Moves</string>
     <string name="evolution">Evolution</string>
@@ -11,4 +11,9 @@
     <string name="base_happiness">Base Happiness</string>
     <string name="capture_Rate">Capture Rate</string>
     <string name="tap_moves">Tap the title to Expand/Contract</string>
+
+    <!-- More Menu -->
+    <string name="settings">Settings</string>
+    <string name="other_apps">Other Apps</string>
+    <string name="about">About</string>
 </resources>
