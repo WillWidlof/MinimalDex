@@ -1,5 +1,7 @@
 package com.widlof.minimaldex.more
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,13 +25,24 @@ class MoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tv_settings.setOnClickListener {
-            findNavController().navigate(R.id.action_moreFragment_to_settingsFragment)
+            findNavController().navigate(MoreFragmentDirections.actionMoreFragmentToSettingsFragment())
+        }
+        tv_other_apps.setOnClickListener {
+            navigateToDeveloperPage()
+        }
+        tv_about.setOnClickListener {
+            findNavController().navigate(MoreFragmentDirections.actionMoreFragmentToAboutFragment())
         }
     }
 
+    private fun navigateToDeveloperPage() {
+        startActivity(Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(DEVELOPER_STORE_URL)
+        })
+    }
+
     companion object {
-        fun newInstance(): MoreFragment {
-            return MoreFragment()
-        }
+        private const val DEVELOPER_STORE_URL =
+            "http://play.google.com/store/apps/developer?id=Widlof+Apps"
     }
 }
