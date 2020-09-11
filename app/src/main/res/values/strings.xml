@@ -18,4 +18,8 @@
     <string name="about">About</string>
     <string name="about_app">This app has been made as a hobby project, with 100% Kotlin code using Android Jetpack Components. Data is fetched from the PokeAPI, under their Fair Use Policy (https://pokeapi.co/docs/v2). However, this project is unofficial and is in no way affiliated with the PokeAPI project (I have a huge amount of respect for their work, it\'s well worth looking at if you\'re into that sort of thing). With the intention of providing ongoing support and new features. The full code is available on GitHub.</string>
     <string name="pokemon_disclaimer">Minimal Dex is an unofficial app, distributed for free. It is NOT in any way affiliated with, nor making any claim to any property of Nintendo, GAME FREAK, or the Pokemon Company. Pokemon and the associated characters are trademarks of nintendo. Some of the images and names used in this app are copyrighted, and are supported under Fair Use. No infringement is intended by this app.</string>
+
+    <!-- Settings -->
+    <string name="system_theme">System Theme</string>
+    <string name="dark_theme">Dark Theme</string>
 </resources>
