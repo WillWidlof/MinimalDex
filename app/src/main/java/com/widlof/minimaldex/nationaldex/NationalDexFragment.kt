@@ -17,8 +17,6 @@ import com.widlof.minimaldex.nationaldex.data.model.PokemonListSingle
 import com.widlof.minimaldex.util.ColourUtils
 import com.widlof.minimaldex.util.ViewUtils
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.cl_grp_pokemon_details
-import kotlinx.android.synthetic.main.fragment_pokemon_details.*
 import java.util.*
 
 /*
@@ -80,10 +78,14 @@ class NationalDexFragment : Fragment() {
                     .actionNationalDexFragmentToPokemonDetailsFragment(it.pokemonName)
             )
         })
-        nationalDexViewModel.isLoadingEvolution.observe(viewLifecycleOwner, Observer {isLoading ->
+        nationalDexViewModel.isLoadingEvolution.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
                 loadingBar = Snackbar
-                    .make(cl_grp_pokemon_details, nationalDexViewModel.getLoadingReason(), Snackbar.LENGTH_INDEFINITE)
+                    .make(
+                        cl_grp_pokemon_details,
+                        nationalDexViewModel.getLoadingReason(),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
                     .setTextColor(ColourUtils.getColour(requireContext(), R.color.textColour))
                     .setDuration(8000).also {
                         it.show()
@@ -121,7 +123,8 @@ class NationalDexFragment : Fragment() {
 
     private fun showFloatingMenu() {
         isMenuOpen = true
-        fab_scroll_bottom.animate().translationY(-resources.getDimension(R.dimen.fab_bottom_spacing))
+        fab_scroll_bottom.animate()
+            .translationY(-resources.getDimension(R.dimen.fab_bottom_spacing))
         fab_scroll_top.animate().translationY(-resources.getDimension(R.dimen.fab_top_spacing))
     }
 
@@ -138,24 +141,7 @@ class NationalDexFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (count == 0) {
-                    nationalDexAdapter.apply {
-                        pokemonList = baseList
-                        notifyDataSetChanged()
-                    }
-                } else {
-                    nationalDexAdapter.apply {
-                        pokemonList = baseList.filter {
-                            val input = s.toString()
-                            if (input.matches(Regex("[0-9]+")) && it.dexNo != null) {
-                                it.dexNo!!.contains(s.toString())
-                            } else {
-                                it.name.contains(s.toString())
-                            }
-                        }
-                        notifyDataSetChanged()
-                    }
-                }
+                updateFilteredList(s, count)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -168,13 +154,36 @@ class NationalDexFragment : Fragment() {
     private fun setUpRecycler() {
         rv_national_dex.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            nationalDexAdapter =
-                NationalDexAdapter(requireContext(), mutableListOf(), object : NationalDexListener {
-                    override fun onPokemonClicked(pokemon: PokemonListSingle) {
-                        nationalDexViewModel.getSinglePokemon(pokemon.name.toLowerCase(Locale.ENGLISH))
-                    }
-                })
+            nationalDexAdapter = buildAdapter()
             adapter = nationalDexAdapter
+        }
+    }
+
+    private fun buildAdapter() = NationalDexAdapter(requireContext(), mutableListOf(),
+        object : NationalDexListener {
+            override fun onPokemonClicked(pokemon: PokemonListSingle) {
+                nationalDexViewModel.getSinglePokemon(pokemon.name.toLowerCase(Locale.ENGLISH))
+            }
+        })
+
+    private fun updateFilteredList(filter: CharSequence?, count: Int) {
+        if (count == 0) {
+            nationalDexAdapter.apply {
+                pokemonList = baseList
+                notifyDataSetChanged()
+            }
+        } else {
+            nationalDexAdapter.apply {
+                pokemonList = baseList.filter {
+                    val input = filter.toString()
+                    if (input.matches(Regex("[0-9]+")) && it.dexNo != null) {
+                        it.dexNo!!.contains(filter.toString())
+                    } else {
+                        it.name.contains(filter.toString())
+                    }
+                }
+                notifyDataSetChanged()
+            }
         }
     }
 }
