@@ -43,6 +43,6 @@ class MoreFragment : Fragment() {
 
     companion object {
         private const val DEVELOPER_STORE_URL =
-            "http://play.google.com/store/apps/developer?id=Widlof+Apps"
+            "https://play.google.com/store/apps/developer?id=Will+Widlof"
     }
 }
