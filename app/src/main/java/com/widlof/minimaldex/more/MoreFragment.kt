@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.widlof.minimaldex.R
 import kotlinx.android.synthetic.main.fragment_more.*
@@ -25,13 +26,13 @@ class MoreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tv_settings.setOnClickListener {
-            findNavController().navigate(MoreFragmentDirections.actionMoreFragmentToSettingsFragment())
+            navigate(MoreFragmentDirections.actionMoreFragmentToSettingsFragment())
         }
         tv_other_apps.setOnClickListener {
             navigateToDeveloperPage()
         }
         tv_about.setOnClickListener {
-            findNavController().navigate(MoreFragmentDirections.actionMoreFragmentToAboutFragment())
+            navigate(MoreFragmentDirections.actionMoreFragmentToAboutFragment())
         }
     }
 
@@ -39,6 +40,10 @@ class MoreFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(DEVELOPER_STORE_URL)
         })
+    }
+
+    private fun navigate(directions: NavDirections) {
+        findNavController().navigate(directions)
     }
 
     companion object {
