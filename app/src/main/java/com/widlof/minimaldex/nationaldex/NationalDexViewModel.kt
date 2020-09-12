@@ -1,5 +1,6 @@
 package com.widlof.minimaldex.nationaldex
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.widlof.minimaldex.nationaldex.data.DexDataSource
@@ -18,7 +19,8 @@ class NationalDexViewModel(
     private val scope = MainScope()
     var pokemonList: MutableLiveData<List<PokemonListSingle>> = MutableLiveData()
     var pokemon: MutableLiveData<PokemonSingle> = MutableLiveData()
-    private var error: String? = null
+    @VisibleForTesting
+    var error: String? = null
     val isLoadingEvolution: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
